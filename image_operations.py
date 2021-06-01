@@ -5,7 +5,8 @@ def open_image(file_path):
     im = Image.open(file_path)
     return im
 
-def transform_image(image:Image,resolution:(int,int),color_profile,jpeg_quality,out_file):
+def transform_image(image_path,resolution:(int,int),color_profile,jpeg_quality,out_file):
+    image = open_image(image_path)
     image.thumbnail(resolution,Image.ANTIALIAS)
     if (color_profile == 'grayscale'):
         image_res = image.convert('L')
