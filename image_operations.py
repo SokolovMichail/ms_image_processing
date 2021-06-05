@@ -5,7 +5,7 @@ def open_image(file_path):
     im = Image.open(file_path)
     return im
 
-def transform_image(image_path,resolution:(int,int),color_profile,jpeg_quality,out_file,keep_aspect_ratio = True):
+def transform_image(image_path,resolution:(int,int),color_profile,jpeg_quality,out_file,icc_profile,keep_aspect_ratio = True):
     image = open_image(image_path)
     if (keep_aspect_ratio):
         image.thumbnail(resolution)
@@ -15,6 +15,6 @@ def transform_image(image_path,resolution:(int,int),color_profile,jpeg_quality,o
         image_res = image.convert('L')
     else:
         image_res = image
-    profile = ImageCms.getOpenProfile("Adobe98.icc")
+    profile = ImageCms.getOpenProfile(icc_profile)
     image_res.save(out_file, "JPEG", quality=jpeg_quality, optimize=True, progressive=True,icc_profile = profile.tobytes())
     return image_res

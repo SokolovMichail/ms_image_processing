@@ -1,8 +1,7 @@
 import tkinter as tk
 import tkinter.ttk as ttk
-from interface import handle_input_folder_selection, handle_output_folder_selection, run_execution_process
-
-
+from interface import handle_input_folder_selection, handle_output_folder_selection, run_execution_process, \
+    handle_icc_profile_selection
 
 OPTIONS = [
 "aRGB",
@@ -21,10 +20,22 @@ state = {
     'conversion':'aRGB',
     'new_size': None,
     'quality' : 100,
+    'icc_profile': None
 }
 
-window.title("Converter v 0.1")
-window.geometry("500x400")
+window.title("Converter v 0.2")
+window.geometry("500x500")
+
+label_icc = tk.Label(text = "Current .icc profile: None")
+label_icc.pack()
+
+button_icc = tk.Button(command = lambda:handle_icc_profile_selection(state,label_icc),
+    text="Select .icc profile",
+    width=35,
+    height=3
+)
+button_icc.pack()
+widgets['icc_loc_button'] = button_icc
 
 label_cif = tk.Label(text = "Current input folder: None")
 label_cif.pack()
