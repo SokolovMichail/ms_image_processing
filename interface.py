@@ -19,6 +19,7 @@ def fill_state(state,widget_dict):
     state['new_size'] = (width,height)
     state['conversion'] = widget_dict['listbox_conversion'].get(widget_dict['listbox_conversion'].curselection())
     state['compression'] = int(widget_dict['entry_width'].get())
+    state['keep_aspect_ratio'] = widget_dict['keep_aspect_ratio'].get()
 
 
 def run_execution_process(state,widget_dict):
@@ -33,5 +34,6 @@ def run_execution_process(state,widget_dict):
                         state['new_size'],
                         state['conversion'],
                         state['compression'],
-                        os.path.join(state['out_folder'], get_filename_jpg(file)))
+                        os.path.join(state['out_folder'], get_filename_jpg(file)),
+                        state['keep_aspect_ratio'])
 

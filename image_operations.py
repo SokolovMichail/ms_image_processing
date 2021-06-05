@@ -5,10 +5,13 @@ def open_image(file_path):
     im = Image.open(file_path)
     return im
 
-def transform_image(image_path,resolution:(int,int),color_profile,jpeg_quality,out_file):
+def transform_image(image_path,resolution:(int,int),color_profile,jpeg_quality,out_file,keep_aspect_ratio = True):
     image = open_image(image_path)
-    image.thumbnail(resolution,Image.ANTIALIAS)
-    if (color_profile == 'grayscale'):
+    if (keep_aspect_ratio):
+        image.thumbnail(resolution)
+    else:
+        image = image.resize(resolution)
+    if (color_profile == 'Grayscale'):
         image_res = image.convert('L')
     else:
         image_res = image

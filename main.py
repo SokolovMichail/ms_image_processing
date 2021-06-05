@@ -2,13 +2,7 @@ import tkinter as tk
 import tkinter.ttk as ttk
 from interface import handle_input_folder_selection, handle_output_folder_selection, run_execution_process
 
-state = {
-    'in_folder': None,
-    'out_folder':None,
-    'conversion':'aRGB',
-    'new_size': None,
-    'quality' : 100
-}
+
 
 OPTIONS = [
 "aRGB",
@@ -19,6 +13,17 @@ widgets = {
 }
 
 window = tk.Tk()
+
+var = tk.BooleanVar()
+state = {
+    'in_folder': None,
+    'out_folder':None,
+    'conversion':'aRGB',
+    'new_size': None,
+    'quality' : 100,
+}
+
+window.title("Converter v 0.1")
 window.geometry("500x400")
 
 label_cif = tk.Label(text = "Current input folder: None")
@@ -76,6 +81,11 @@ for opt in OPTIONS:
 listbox_conversion.pack()
 listbox_conversion.select_set(0)
 widgets['listbox_conversion'] = listbox_conversion
+
+checkbox_aspectratio = tk.Checkbutton(text="Keep aspect ratio?",variable = var,
+                                      onvalue=True, offvalue=False)
+checkbox_aspectratio.pack()
+widgets['keep_aspect_ratio'] = var
 
 progressbar = ttk.Progressbar()
 progressbar['length'] = 100
