@@ -1,19 +1,93 @@
-import os
-from pathlib import Path
+import tkinter as tk
+import tkinter.ttk as ttk
+from interface import handle_input_folder_selection, handle_output_folder_selection, run_execution_process
 
-from file_operations import list_all_files_dir,get_filename_jpg
-from image_operations import transform_image
+state = {
+    'in_folder': None,
+    'out_folder':None,
+    'conversion':'aRGB',
+    'new_size': None,
+    'quality' : 100
+}
 
-def process_all_files_in_dir(path,resolution,color_profile,jpeg_quality,out_dir):
-    files = list_all_files_dir(path)
-    for file in files:
-        try:
-            transform_image(file,
-                            resolution,
-                            color_profile,
-                            jpeg_quality,
-                            os.path.join(out_dir,get_filename_jpg(file)))
-        finally:
-            pass
+OPTIONS = [
+"aRGB",
+"Grayscale",
+] #etc
 
-process_all_files_in_dir("in_folder",(200,200),'aRGB',100,"out_folder")
+widgets = {
+}
+
+window = tk.Tk()
+window.geometry("500x400")
+
+label_cif = tk.Label(text = "Current input folder: None")
+label_cif.pack()
+
+button_input = tk.Button(command = lambda:handle_input_folder_selection(state,label_cif),
+    text="Select folder with files to be converted",
+    width=35,
+    height=3
+)
+button_input.pack()
+widgets['input_folder_button'] = button_input
+
+
+label_cof = tk.Label(text = "Current input folder: None")
+label_cof.pack()
+
+button_output = tk.Button(command = lambda:handle_output_folder_selection(state,label_cof),
+    text="Select folder where to store converted files",
+    width=35,
+    height=3
+)
+button_output.pack()
+widgets['output_folder_button'] = button_output
+
+label_width = tk.Label(text = "Input width(integer value) below")
+label_width.pack()
+
+entry_width = tk.Entry()
+entry_width.pack()
+widgets['entry_width'] = entry_width
+
+label_height= tk.Label(text = "Input height(integer value) below")
+label_height.pack()
+
+entry_height = tk.Entry()
+entry_height.pack()
+widgets['entry_height'] = entry_height
+
+label_compression= tk.Label(text = "Input quality value(0 is lowest, 100 is highest) below")
+label_compression.pack()
+
+entry_comp = tk.Entry()
+entry_comp.pack()
+widgets['entry_comp'] = entry_comp
+
+label_conv= tk.Label(text = "Select conversion")
+label_conv.pack()
+
+listbox_conversion = tk.Listbox (selectmode = 'SINGLE', height = 2)
+i = 0
+for opt in OPTIONS:
+    listbox_conversion.insert(i,opt)
+    i+=1
+listbox_conversion.pack()
+listbox_conversion.select_set(0)
+widgets['listbox_conversion'] = listbox_conversion
+
+progressbar = ttk.Progressbar()
+progressbar['length'] = 100
+progressbar.pack()
+widgets['progressbar'] = progressbar
+
+button_start = tk.Button(command = lambda:run_execution_process(state,widgets),
+    text="Start conversion",
+    width=35,
+    height=3
+)
+button_start.pack()
+widgets['start_button'] = button_start
+
+window.mainloop()
