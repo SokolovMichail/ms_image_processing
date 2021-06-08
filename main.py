@@ -98,10 +98,10 @@ if __name__ == '__main__':
     checkbox_aspectratio.pack()
     widgets['keep_aspect_ratio'] = var
 
-    progressbar = ttk.Progressbar()
-    progressbar['length'] = 100
-    progressbar.pack()
-    widgets['progressbar'] = progressbar
+    #progressbar = ttk.Progressbar()
+    #progressbar['length'] = 100
+    #progressbar.pack()
+    #widgets['progressbar'] = progressbar
 
     button_start = tk.Button(command = lambda:run_execution_process(state,widgets),
         text="Start conversion",
