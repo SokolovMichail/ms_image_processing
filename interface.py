@@ -1,5 +1,6 @@
 import os
 from tkinter import filedialog as fd
+import multiprocessing
 
 from file_operations import list_all_files_dir, get_filename_jpg
 from image_operations import transform_image
@@ -25,20 +26,25 @@ def fill_state(state,widget_dict):
     state['compression'] = int(widget_dict['entry_width'].get())
     state['keep_aspect_ratio'] = widget_dict['keep_aspect_ratio'].get()
 
+def process_single_file(file,state):
+    #widget_dict['progressbar']['value'] += addition
+    transform_image(file,
+                    state['new_size'],
+                    state['conversion'],
+                    state['compression'],
+                    os.path.join(state['out_folder'], get_filename_jpg(file)),
+                    state['icc_profile'],
+                    state['keep_aspect_ratio'])
+
 
 def run_execution_process(state,widget_dict):
     fill_state(state,widget_dict)
     all_files = list_all_files_dir(state['in_folder'])
+    prepared_args = []
+    for f in all_files:
+        prepared_args.append((f,state))
     addition = 100 / len(all_files)
     widget_dict['progressbar']['value'] = 0
-
-    for file in list_all_files_dir(state['in_folder']):
-        widget_dict['progressbar']['value'] += addition
-        transform_image(file,
-                        state['new_size'],
-                        state['conversion'],
-                        state['compression'],
-                        os.path.join(state['out_folder'], get_filename_jpg(file)),
-                        state['icc_profile'],
-                        state['keep_aspect_ratio'])
+    with multiprocessing.Pool(multiprocessing.cpu_count()-1) as p:
+        p.starmap(process_single_file,prepared_args)
 
