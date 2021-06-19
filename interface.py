@@ -44,7 +44,7 @@ def run_execution_process(state,widget_dict):
     for f in all_files:
         prepared_args.append((f,state))
     addition = 100 / len(all_files)
-    widget_dict['progressbar']['value'] = 0
+    #widget_dict['progressbar']['value'] = 0
     with multiprocessing.Pool(multiprocessing.cpu_count()-1) as p:
         p.starmap(process_single_file,prepared_args)
 
