@@ -50,7 +50,6 @@ def run_execution_process(state, widget_dict):
         prepared_args.append((f, state))
     addition = 100 / len(all_files)
     # widget_dict['progressbar']['value'] = 0
-    with multiprocessing.Pool(
-            multiprocessing.cpu_count()) as p:
-        # the interface is just a dummy app, it does not make conversions
+    with multiprocessing.Pool(multiprocessing.cpu_count() - 1) as p:
+        # the interface is just a dummy app, it does not make conversions.
         p.starmap(process_single_file, prepared_args)
