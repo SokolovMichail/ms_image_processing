@@ -1,5 +1,5 @@
+import multiprocessing
 import tkinter as tk
-import tkinter.ttk as ttk
 from interface import handle_input_folder_selection, handle_output_folder_selection, run_execution_process, \
     handle_icc_profile_selection
 
@@ -111,4 +111,5 @@ button_start = tk.Button(command = lambda:run_execution_process(state,widgets),
 button_start.pack()
 widgets['start_button'] = button_start
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     window.mainloop()
