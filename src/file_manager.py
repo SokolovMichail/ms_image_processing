@@ -1,4 +1,4 @@
-from pathlib import Path
+import os
 
 
 class FileManager():
@@ -6,11 +6,11 @@ class FileManager():
     @staticmethod
     def list_all_files_dir(path):
         res = []
-
-        for file in Path(path).glob(r'\S*\.(tiff|bmp)'):
-            res.append(Path(path)/file)
+        for file in os.listdir(path):
+            if (file.endswith(".tiff") or file.endswith(".png") or file.endswith(".bmp")):
+                res.append(os.path.join(path, file))
         return res
 
     @staticmethod
     def get_filename_jpg(path):
-        return Path(path).rename(Path(path).with_suffix('jpg'))
+        return os.path.basename(path).split('.')[0] + ".jpg"

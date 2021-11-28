@@ -37,7 +37,7 @@ class GlobalConfig(metaclass=SingletonMeta):
                     {
                         'width': None,
                         'height': None,
-                        'quality': None,
+                        'compression': None,
                         'conversion': None,
                         'keep_ar': None
                     }

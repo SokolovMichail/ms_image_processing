@@ -1,6 +1,7 @@
 from PIL import Image, ImageCms
 import os
 
+
 class ImageManager:
     @staticmethod
     def open_image(file_path):
@@ -21,5 +22,5 @@ class ImageManager:
             image_res = image
         profile = ImageCms.getOpenProfile(icc_profile)
         image_res.save(out_file, "JPEG", quality=jpeg_quality, optimize=True, progressive=True,
-                       icc_profile=profile.tobytes())
+                       icc_profile=profile.tobytes(), subsampling=-1)
         return image_res
