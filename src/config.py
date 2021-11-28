@@ -39,7 +39,7 @@ class GlobalConfig(metaclass=SingletonMeta):
                         'height': None,
                         'compression': None,
                         'conversion': None,
-                        'keep_ar': None
+                        'aspect_ratio': False
                     }
 
             }

@@ -18,15 +18,16 @@ class Interface:
             'inputs': {},
             'buttons': {}
         }
-        self.checkbox_var = True
         self._window = self.__generate_window()
+        if self.cfg['image_settings']['aspect_ratio'] is not None:
+            self.checkbox_var.set(self.cfg['image_settings']['aspect_ratio'])
 
     def __generate_window(self):
         # General
         window = tk.Tk()
         window.title("Converter v 0.4.0")
         window.geometry("500x500")
-
+        self.checkbox_var = tk.IntVar()
         self.__place_icc(window)
         self.__place_in_folder(window)
         self.__place_out_folder(window)
@@ -55,7 +56,7 @@ class Interface:
     def handle_output_folder_selection(self):
         self.cfg['pathes']['out_folder'] = fd.askdirectory()
         label = self.elements_dict['labels']['out_folder']
-        label['text'] = 'Current input folder: ' + self.cfg['pathes']['out_folder']
+        label['text'] = 'Current output folder: ' + self.cfg['pathes']['out_folder']
 
     def fill_state(self):
         width = int(self.elements_dict['inputs']['width'].get())
@@ -66,13 +67,12 @@ class Interface:
             self.elements_dict['inputs']['conversion'].get(
                 self.elements_dict['inputs']['conversion'].curselection())
         self.cfg['image_settings']['compression'] = int(self.elements_dict['inputs']['compression'].get())
-        self.cfg['image_settings']['aspect_ratio'] = self.checkbox_var
+        self.cfg['image_settings']['aspect_ratio'] = self.checkbox_var.get()
         self.cfg.dump()
 
     def run_execution_process(self):
         self.fill_state()
         all_files = FileManager.list_all_files_dir(self.cfg['pathes']['in_folder'])
-        icc_profile = ImageCms.getOpenProfile(self.cfg['pathes']['icc_profile'])
         prepared_args = []
         for f in all_files:
             prepared_args.append((f, self.cfg))
@@ -96,6 +96,8 @@ class Interface:
                                )
         button_icc.pack()
         self.elements_dict['buttons']['icc_profile'] = button_icc
+        if self.cfg['pathes']['icc_profile'] is not None:
+            label_icc['text'] = self.cfg['pathes']['icc_profile']
 
     def __place_in_folder(self, window):
         # InputFolder Selection
@@ -112,6 +114,8 @@ class Interface:
                                  )
         button_input.pack()
         self.elements_dict['buttons']['in_folder'] = button_input
+        if self.cfg['pathes']['in_folder'] is not None:
+            label_cif['text'] = self.cfg['pathes']['in_folder']
 
     def __place_out_folder(self, window):
         # OutputFolder Selection
@@ -129,6 +133,8 @@ class Interface:
                                   )
         button_output.pack()
         self.elements_dict['buttons']['out_folder'] = button_output
+        if self.cfg['pathes']['out_folder'] is not None:
+            label_cof['text'] = self.cfg['pathes']['out_folder']
 
     def __place_width(self, window):
         label_width = tk.Label(window,
@@ -184,16 +190,22 @@ class Interface:
             listbox_conversion.insert(i, opt)
             i += 1
         listbox_conversion.pack()
-
-        listbox_conversion.select_set(0)
+        if self.cfg['image_settings']['conversion'] is not None:
+            if self.cfg['image_settings']['conversion'] == 'aRGB':
+                listbox_conversion.select_set(0)
+            else:
+                listbox_conversion.select_set(1)
         self.elements_dict['inputs']['conversion'] = listbox_conversion
 
     def __place_aspectratio(self, window):
         checkbox_aspectratio = tk.Checkbutton(window,
                                               text="Keep aspect ratio?", variable=self.checkbox_var,
-                                              onvalue=True, offvalue=False)
+                                              onvalue=1, offvalue=0)
         checkbox_aspectratio.pack()
         self.elements_dict['inputs']['aspect_ratio'] = checkbox_aspectratio
+        if self.cfg['image_settings']['aspect_ratio']:
+            checkbox_aspectratio.select()
+        x = self.checkbox_var.get()
 
     def __place_start_button(self, window):
         button_start = tk.Button(window,
