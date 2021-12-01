@@ -2,8 +2,6 @@ import multiprocessing
 import tkinter as tk
 from tkinter import filedialog as fd
 
-from PIL import ImageCms
-
 from src.config import GlobalConfig
 from src.file_manager import FileManager
 from src.process import process_single_file
